@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: node-app
+  template:
+    metadata:
+      labels:
+        component: node-app
+    spec:
+      containers:
+        - name: node-app
+          image: docker.io/snehasharma2606/simpleblogapi:1.2
+          ports:
+            - containerPort: 3000
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              value: postgres-cluster-ip-service
